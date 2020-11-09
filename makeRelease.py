@@ -12,36 +12,43 @@ from datetime import date
 def main():
     """ The main entry point of the analyse log script
     """
-    feedback = 1
-    options = parse_options()
+    parser = parseCmdLine()
+    options = parser.parse_args()
 
-    # Check if all options are set and valid
-    if not options.source:
-        feedback = 2
-    if not options.destination:
-        feedback = 3
-    if not options.releaseVersion:
-        feedback = 4
-    if not options.nextVersion:
-        feedback = 5
-    feedback = 0
+    feedback = validateOptions(options)
 
-    repo = git.Repo('.')
-    print(str(repo.git.status()))
+    if 0 == feedback:
+        repo = git.Repo('.')
+        print(str(repo.git.status()))
+    else:
+        parser.print_help()
 
     return feedback
 
 
 #---------------------------------------------------------------------------
-def parse_options():
+# Check if all options are set and valid
+def validateOptions(options):
+    feedback = 0
+    if not options.source:
+        feedback = 1
+    if not options.destination:
+        feedback = 2
+    if not options.releaseVersion:
+        feedback = 3
+    if not options.nextVersion:
+        feedback = 4
+    return feedback
+
+#---------------------------------------------------------------------------
+def parseCmdLine():
     ''' Parse the command line. '''
     parser = argparse.ArgumentParser(description="Door Bot Log File Analyzer")
     parser.add_argument('-s', '--source', default=None, help='Source branch name')
     parser.add_argument('-d', '--destination', default=None, help='Destination branch name')
     parser.add_argument('-r', '--releaseVersion', default=None, help='Version of the release')
     parser.add_argument('-n', '--nextVersion', default=None, help='Next version on the source branch')
-    options = parser.parse_args()
-    return options
+    return parser
 
 
 
