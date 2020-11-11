@@ -83,17 +83,15 @@ def setVersionNumberAndCommit(repo, verNumber):
 #---------------------------------------------------------------------------
 # Merge the branch
 def runMerge(sourceBranch, versionNr):
+    print('runMerge')
+    #cmd = ['git', '-C', path, 'branch', '-a']
+    cmd = ['git', 'merge', '--no-ff', '-m ' + versionNr,  sourceBranch ]
+    print(cmd)
     try:
-        #>>> result = subprocess.run(['ls', '-l'], stdout=subprocess.PIPE)
-        #>>> result.stdoutfrom datetime import date
-        mergeString = 'git merge --no-ff -m "' + versionNr + '" ' + sourceBranch
-        print('Merge string: ' + mergeString)
-        #repo.git.merge(mergeString, no_ff=True)
-        result = subprocess.run([mergeString], stdout=subprocess.PIPE)
-        print('res: ' + str(result.stdout))
+        out = subprocess.check_output(cmd, stderr=subprocess.STDOUT)
         return True
     except:
-        print('Merge could not be performed (' + sourceBranch + ')')
+        print('Could not merge')
         return False
 
 
