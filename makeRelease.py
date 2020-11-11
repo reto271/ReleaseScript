@@ -59,21 +59,19 @@ def makeRelease(repo, options):
         return False
 
     # Merge the branch
-    runMerge(options.source)
-    repo.remotes.origin.push()
+    runMerge(options.source, options.releaseVersion)
+    feedback = repo.remotes.origin.push()
 
-    try:
-        repo.git.checkout(options.source)
-    except:
-        print('Could not checkout branch "' + options.source + '". There are might be local changes in the current branch.')
-        return False
+    if True == feedback:
+        try:
+            repo.git.checkout(options.source)
+        except:
+            print('Could not checkout branch "' + options.source + '". There are might be local changes in the current branch.')
+            return False
 
-    # Merge the release branch back
-    runMerge(options.destination)
+        setVersionNumberAndCommit(repo, options.nextVersion)
+        repo.remotes.origin.push()
 
-    setVersionNumberAndCommit(repo, options.nextVersion)
-
-    repo.remotes.origin.push()
     return True
 
 #---------------------------------------------------------------------------
@@ -85,10 +83,12 @@ def setVersionNumberAndCommit(repo, verNumber):
 
 #---------------------------------------------------------------------------
 # Merge the branch
-def runMerge(sourceBranch):
+def runMerge(sourceBranch, versionNr):
     try:
-        #repo.git.merge(sourceBranch, no_ff=True)
-        repo.git.merge(sourceBranch)
+        mergeString = 'sourceBranch -m "' + versionNr + '"'
+        print('Merge string: ' + mergeString)
+        repo.git.merge(mergeString, no_ff=True)
+        return True
     except:
         print('Merge could not be performed (' + sourceBranch + ')')
         return False
