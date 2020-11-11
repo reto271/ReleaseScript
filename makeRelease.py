@@ -51,7 +51,7 @@ def makeRelease(repo, options):
         return False
 
 
-    setVersionNumberAndCommit(options.releaseVersion)
+    setVersionNumberAndCommit(repo, options.releaseVersion)
 
     try:
         repo.git.checkout(options.destination)
@@ -75,7 +75,7 @@ def makeRelease(repo, options):
         print('Could not checkout branch "' + options.source + '". There are might be local changes in the current branch.')
         return False
 
-    setVersionNumberAndCommit(options.nextVersion)
+    setVersionNumberAndCommit(repo, options.nextVersion)
 
     repo.remotes.origin.push()
     return True
