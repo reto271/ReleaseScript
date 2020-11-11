@@ -17,59 +17,59 @@ class Test_MakeRelease(unittest.TestCase):
 
 
     def test_testValidReleaseVersion(self):
-        testDate = makeRelease.validateReleaseVersion('V12.34 B01')
+        testDate = makeRelease.validateNextVersion('V12.34 B01')
         self.assertEqual(True, testDate)
 
     def test_testValidReleaseVersion_wrongV(self):
-        testDate = makeRelease.validateReleaseVersion('v12.34 B12')
+        testDate = makeRelease.validateNextVersion('v12.34 B12')
         self.assertEqual(False, testDate)
 
     def test_testValidReleaseVersion_wrongSeparator(self):
-        testDate = makeRelease.validateReleaseVersion('V12,34 B89')
+        testDate = makeRelease.validateNextVersion('V12,34 B89')
         self.assertEqual(False, testDate)
 
     def test_testValidReleaseVersion_wrongMajor(self):
-        testDate = makeRelease.validateReleaseVersion('V1a.34 B12')
+        testDate = makeRelease.validateNextVersion('V1a.34 B12')
         self.assertEqual(False, testDate)
 
     def test_testValidReleaseVersion_wrongMinor(self):
-        testDate = makeRelease.validateReleaseVersion('V12.3f B55')
+        testDate = makeRelease.validateNextVersion('V12.3f B55')
         self.assertEqual(False, testDate)
 
     def test_testValidReleaseVersion_majorToShort(self):
-        testDate = makeRelease.validateReleaseVersion('V1.30 B00')
+        testDate = makeRelease.validateNextVersion('V1.30 B00')
         self.assertEqual(False, testDate)
 
     def test_testValidReleaseVersion_minorToShort(self):
-        testDate = makeRelease.validateReleaseVersion('V88.3 B10')
+        testDate = makeRelease.validateNextVersion('V88.3 B10')
         self.assertEqual(False, testDate)
 
     def test_testValidReleaseVersion_(self):
-        testDate = makeRelease.validateReleaseVersion('V88.33B10')
+        testDate = makeRelease.validateNextVersion('V88.33B10')
         self.assertEqual(False, testDate)
 
     def test_testValidReleaseVersion_(self):
-        testDate = makeRelease.validateReleaseVersion('V88.33 b10')
+        testDate = makeRelease.validateNextVersion('V88.33 b10')
         self.assertEqual(False, testDate)
 
     def test_testValidReleaseVersion_(self):
-        testDate = makeRelease.validateReleaseVersion('V88.33_B10')
+        testDate = makeRelease.validateNextVersion('V88.33_B10')
         self.assertEqual(False, testDate)
 
     def test_testValidReleaseVersion_(self):
-        testDate = makeRelease.validateReleaseVersion('V88.33-B10')
+        testDate = makeRelease.validateNextVersion('V88.33-B10')
         self.assertEqual(False, testDate)
 
     def test_testValidReleaseVersion_(self):
-        testDate = makeRelease.validateReleaseVersion('V88.33 B1a')
+        testDate = makeRelease.validateNextVersion('V88.33 B1a')
         self.assertEqual(False, testDate)
 
     def test_testValidReleaseVersion_(self):
-        testDate = makeRelease.validateReleaseVersion('V88.33 B10')
+        testDate = makeRelease.validateNextVersion('V88.33 B10')
         self.assertEqual(False, testDate)
 
     def test_testValidReleaseVersion_(self):
-        testDate = makeRelease.validateReleaseVersion('V88.33 B1')
+        testDate = makeRelease.validateNextVersion('V88.33 B1')
         self.assertEqual(False, testDate)
 
 

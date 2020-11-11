@@ -48,7 +48,7 @@ def validateOptions(repo, options):
     if True == feedback:
         feedback = validateReleaseVersion(options.releaseVersion)
     if True == feedback:
-        feedback = validateNextVersion(options.source)
+        feedback = validateNextVersion(options.nextVersion)
     return feedback
 
 
@@ -89,13 +89,15 @@ def validateReleaseVersion(releaseVersion):
 
 #---------------------------------------------------------------------------
 #
-def validateNextVersion(releaseVersion):
+def validateNextVersion(nextVersion):
     feedback = True
-    leadingV = releaseVersion[0:1]
-    majorV = tryInt(releaseVersion[1:3])
-    minorV = tryInt(releaseVersion[4:6])
-    separater = releaseVersion[3:4]
-    strLen = len(releaseVersion)
+    leadingV = nextVersion[0:1]
+    majorV = tryInt(nextVersion[1:3])
+    minorV = tryInt(nextVersion[4:6])
+    separator1 = nextVersion[3:4]
+    separator2 = nextVersion[6:8]
+    betaV = tryInt(nextVersion[8:10])
+    strLen = len(nextVersion)
 
     if 'V' != leadingV:
         feedback = False
@@ -103,17 +105,12 @@ def validateNextVersion(releaseVersion):
         feedback = False
     if ((0 > minorV) or (99 < minorV)):
         feedback = False
-    if '.' != separater:
+    if ((0 > betaV) or (99 < betaV)):
         feedback = False
-    if 6 != strLen:
+    if '.' != separator1:
         feedback = False
-    return feedback
-
-
-#---------------------------------------------------------------------------
-#
-def validateNextVersion(nextVersion):
-    feedback = True
+    if 10 != strLen:
+        feedback = False
     return feedback
 
 
