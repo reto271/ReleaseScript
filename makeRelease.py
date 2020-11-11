@@ -58,10 +58,10 @@ def makeRelease(repo, options):
         return False
 
     # Merge the branch
-    runMerge(options.source, options.releaseVersion)
-    feedback = repo.remotes.origin.push()
+    feedback = runMerge(options.source, options.releaseVersion)
 
     if True == feedback:
+        repo.remotes.origin.push()
         try:
             repo.git.checkout(options.source)
         except:
