@@ -78,7 +78,7 @@ def makeRelease(repo, options):
 
     setVersionNumber(options.nextVersion)
     repo.index.add('VersionNumber.txt')
-    repo.git.commit('-m', 'Set version number to ' + options.releaseVersion)
+    repo.git.commit('-m', 'Set version number to ' + options.nextVersion)
 
     repo.remotes.origin.push()
     return True
