@@ -12,6 +12,9 @@ from datetime import date
 def main():
     """ The main entry point of the analyse log script
     """
+
+    printVersionNumber()
+
     parser = parseCmdLine()
     options = parser.parse_args()
 
@@ -19,13 +22,73 @@ def main():
     feedback = validateOptions(repo, options)
 
     if True == feedback:
-        #print(str(repo.git.status()))
+        makeRelease(repo, options)
         return 0
     else:
         parser.print_help()
         return 1
 
 
+
+#---------------------------------------------------------------------------
+# Check if all options are set and valid
+def makeRelease(repo, options):
+    # checkout the branch using git-checkout. It will fail as the working tree appears dirty
+    print(str(repo.heads))
+
+    # Test if the release branch is available
+    try:
+        repo.git.checkout(options.destination)
+    except:
+        print('Could not checkout branch "' + options.destination + '". There are might be local changes in the current branch.')
+        return False
+
+    # Test if the target branch is available and prepare the release
+    try:
+        repo.git.checkout(options.source)
+    except:
+        print('Could not checkout branch "' + options.source + '". There are might be local changes in the current branch.')
+        return False
+
+    setVersionNumber(options.releaseVersion)
+    repo.index.add('VersionNumber.txt')
+    repo.git.commit('-m', 'Set version number to ' + options.releaseVersion)
+
+    try:
+        repo.git.checkout(options.destination)
+    except:
+        print('Could not checkout branch "' + options.destination + '". There are might be local changes in the current branch.')
+        return False
+
+    # Merge the branch
+    try:
+        repo.git.merge(options.source)
+    except:
+        print('Merge could not be performed.')
+        return False
+
+    repo.remotes.origin.push()
+
+
+    try:
+        repo.git.checkout(options.source)
+    except:
+        print('Could not checkout branch "' + options.source + '". There are might be local changes in the current branch.')
+        return False
+
+    setVersionNumber(options.nextVersion)
+    repo.index.add('VersionNumber.txt')
+    repo.git.commit('-m', 'Set version number to ' + options.releaseVersion)
+
+    repo.remotes.origin.push()
+    return True
+
+#---------------------------------------------------------------------------
+#
+def setVersionNumber(versionNumber):
+    with open('VersionNumber.txt', 'w') as f:
+        f.write(versionNumber + '\n')
+        f.close()
 
 
 #---------------------------------------------------------------------------
@@ -124,6 +187,7 @@ def tryInt(s, val=-1):
 
 
 #---------------------------------------------------------------------------
+# Defines the commands
 def parseCmdLine():
     ''' Parse the command line. '''
     parser = argparse.ArgumentParser(description="Door Bot Log File Analyzer")
@@ -132,6 +196,18 @@ def parseCmdLine():
     parser.add_argument('-r', '--releaseVersion', default=None, help='Version of the release')
     parser.add_argument('-n', '--nextVersion', default=None, help='Next version on the source branch')
     return parser
+
+#---------------------------------------------------------------------------
+# Prints the version number
+def printVersionNumber():
+    try:
+        with open('VersionNumber.txt', 'r') as versionFile:
+            versionNumber = versionFile.read().rstrip()
+            print('Version: ' + str(versionNumber))
+            versionFile.close()
+    except:
+        print('File ' + str(logFileName) + ' not found.')
+        return -2
 
 
 
