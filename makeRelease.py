@@ -18,74 +18,87 @@ def main():
     repo = git.Repo('.')
     feedback = validateOptions(repo, options)
 
-    if 0 == feedback:
+    if True == feedback:
         #print(str(repo.git.status()))
-        pass
+        return 0
     else:
         parser.print_help()
+        return 1
 
-    return feedback
+
 
 
 #---------------------------------------------------------------------------
 # Check if all options are set and valid
 def validateOptions(repo, options):
-    feedback = 0
+    feedback = True
     if not options.source:
-        feedback = 1
+        feedback = False
     if not options.destination:
-        feedback = 2
+        feedback = False
     if not options.releaseVersion:
-        feedback = 3
+        feedback = False
     if not options.nextVersion:
-        feedback = 4
+        feedback = False
 
-    if 0 == feedback:
+    if True == feedback:
         feedback = checkIfBranchExists(repo, options.source)
-    if 0 == feedback:
+    if True == feedback:
         feedback = checkIfBranchExists(repo, options.destination)
-    if 0 == feedback:
+    if True == feedback:
         feedback = validateReleaseVersion(options.releaseVersion)
-    if 0 == feedback:
+    if True == feedback:
         feedback = validateNextVersion(options.source)
     return feedback
 
+
+#---------------------------------------------------------------------------
+#
 def checkIfBranchExists(repo, branchName):
-    feedback = 5
+    feedback = False
     for br in repo.branches:
         if str(br) == str(branchName):
-            feedback = 0
-    if 0 != feedback:
+            feedback = True
+    if False == feedback:
         print('Branch: "' + branchName + '" does not exist in git repo.')
     return feedback
 
+
+#---------------------------------------------------------------------------
+#
 def validateReleaseVersion(releaseVersion):
-    feedback = 0
+    feedback = True
     leadingV = releaseVersion[0:1]
     majorV = tryInt(releaseVersion[1:3])
     minorV = tryInt(releaseVersion[4:6])
     separater = releaseVersion[3:4]
 
     if 'V' != leadingV:
-        feedback = 6
+        feedback = False
     if ((0 > majorV) or (99 < majorV)):
-        feedback = 7
+        feedback = False
     if ((0 > minorV) or (99 < minorV)):
-        feedback = 8
+        feedback = False
     if '.' != separater:
-        feedback = 9
+        feedback = False
     return feedback
 
+
+#---------------------------------------------------------------------------
+#
 def validateNextVersion(nextVersion):
-    feedback = 0
+    feedback = True
     return feedback
 
+
+#---------------------------------------------------------------------------
 # Try if it is an int and return a default value
 def tryInt(s, val=-1):
   try:
     return int(s)
   except ValueError:
     return val
+
 
 #---------------------------------------------------------------------------
 def parseCmdLine():

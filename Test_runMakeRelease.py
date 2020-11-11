@@ -18,23 +18,23 @@ class Test_MakeRelease(unittest.TestCase):
 
     def test_testValidReleaseVersion(self):
         testDate = makeRelease.validateReleaseVersion('V12.34')
-        self.assertEqual(0, testDate)
+        self.assertEqual(True, testDate)
 
     def test_testValidReleaseVersion_wrongV(self):
         testDate = makeRelease.validateReleaseVersion('v12.34')
-        self.assertEqual(6, testDate)
+        self.assertEqual(False, testDate)
 
     def test_testValidReleaseVersion_wrongSeparator(self):
         testDate = makeRelease.validateReleaseVersion('V12,34')
-        self.assertEqual(9, testDate)
+        self.assertEqual(False, testDate)
 
     def test_testValidReleaseVersion_wrongMajor(self):
         testDate = makeRelease.validateReleaseVersion('V1a.34')
-        self.assertEqual(7, testDate)
+        self.assertEqual(False, testDate)
 
     def test_testValidReleaseVersion_wrongMinor(self):
         testDate = makeRelease.validateReleaseVersion('V12,3f')
-        self.assertEqual(9, testDate)
+        self.assertEqual(False, testDate)
 
 if __name__ == '__main__':
     import xmlrunner
