@@ -50,9 +50,8 @@ def makeRelease(repo, options):
         print('Could not checkout branch "' + options.source + '". There are might be local changes in the current branch.')
         return False
 
-    setVersionNumber(options.releaseVersion)
-    repo.index.add('VersionNumber.txt')
-    repo.git.commit('-m', 'Set version number to ' + options.releaseVersion)
+
+    setVersionNumberAndCommit(options.releaseVersion)
 
     try:
         repo.git.checkout(options.destination)
@@ -76,12 +75,17 @@ def makeRelease(repo, options):
         print('Could not checkout branch "' + options.source + '". There are might be local changes in the current branch.')
         return False
 
-    setVersionNumber(options.nextVersion)
-    repo.index.add('VersionNumber.txt')
-    repo.git.commit('-m', 'Set version number to ' + options.nextVersion)
+    setVersionNumberAndCommit(options.nextVersion)
 
     repo.remotes.origin.push()
     return True
+
+#---------------------------------------------------------------------------
+#
+def setVersionNumberAndCommit(repo, verNumber):
+    setVersionNumber(verNumber)
+    repo.index.add('VersionNumber.txt')
+    repo.git.commit('-m', 'Set version number to ' + verNumber)
 
 #---------------------------------------------------------------------------
 #
