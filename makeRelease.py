@@ -9,7 +9,11 @@ import subprocess
 
 #---------------------------------------------------------------------------
 def main():
-    """ The main entry point of the release log script
+    """ The main entry point of the release log script.
+        ./makeRelease.sh  --source=develop --destination=main --releaseVersion=V00.21 --nextVersion="V00.22 B01"
+        creates a release on with V0.21 on the main brnach. It merges the changes
+        from develop. The version on the develop will be V00.22 B01 after the script
+        finished.
     """
 
     printVersionNumber()
