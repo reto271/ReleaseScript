@@ -57,15 +57,10 @@ def makeRelease(repo, options):
         return False
 
     # Merge the branch
-    try:
-        repo.git.merge(options.source)
-    except:
-        print('Merge could not be performed.')
-        return False
+    runMerge(options.source)
 
     setVersionNumberAndCommit(repo, options.releaseVersion)
     repo.remotes.origin.push()
-
 
     try:
         repo.git.checkout(options.source)
@@ -74,11 +69,7 @@ def makeRelease(repo, options):
         return False
 
     # Merge the release branch back
-    try:
-        repo.git.merge(options.destination)
-    except:
-        print('Merge could not be performed.')
-        return False
+    runMerge(options.destination)
 
     setVersionNumberAndCommit(repo, options.nextVersion)
 
@@ -91,6 +82,16 @@ def setVersionNumberAndCommit(repo, verNumber):
     setVersionNumber(verNumber)
     repo.index.add('VersionNumber.txt')
     repo.git.commit('-m', 'Set version number to ' + verNumber)
+
+#---------------------------------------------------------------------------
+# Merge the branch
+def runMerge(sourceBranch):
+    try:
+        repo.git.merge(sourceBranch, no_ff=True)
+    except:
+        print('Merge could not be performed (' + sourceBranch + ')')
+        return False
+
 
 #---------------------------------------------------------------------------
 # Write the version number to the version file
