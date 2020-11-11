@@ -5,7 +5,7 @@ import git
 import argparse
 import os.path
 import os
-#import subprocess
+import subprocess
 
 #---------------------------------------------------------------------------
 def main():
@@ -86,9 +86,11 @@ def runMerge(sourceBranch, versionNr):
     try:
         #>>> result = subprocess.run(['ls', '-l'], stdout=subprocess.PIPE)
         #>>> result.stdoutfrom datetime import date
-        mergeString = sourceBranch + ' -m "' + versionNr + '"'
+        mergeString = 'git merge --no-ff -m "' + versionNr + '" ' + sourceBranch
         print('Merge string: ' + mergeString)
-        repo.git.merge(mergeString, no_ff=True)
+        #repo.git.merge(mergeString, no_ff=True)
+        result = subprocess.run([mergeString], stdout=subprocess.PIPE)
+        print('res: ' + str(result.stdout))
         return True
     except:
         print('Merge could not be performed (' + sourceBranch + ')')
