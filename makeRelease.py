@@ -73,6 +73,13 @@ def makeRelease(repo, options):
         print('Could not checkout branch "' + options.source + '". There are might be local changes in the current branch.')
         return False
 
+    # Merge the release branch back
+    try:
+        repo.git.merge(options.destination)
+    except:
+        print('Merge could not be performed.')
+        return False
+
     setVersionNumberAndCommit(repo, options.nextVersion)
 
     repo.remotes.origin.push()
