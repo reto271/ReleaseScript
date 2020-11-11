@@ -59,7 +59,7 @@ def makeRelease(repo, options):
         return False
 
     # Merge the branch
-    runMerge(options.source)
+    runMerge(options.source, options.releaseVersion)
     feedback = repo.remotes.origin.push()
 
     if True == feedback:
