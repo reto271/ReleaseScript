@@ -33,7 +33,15 @@ class Test_MakeRelease(unittest.TestCase):
         self.assertEqual(False, testDate)
 
     def test_testValidReleaseVersion_wrongMinor(self):
-        testDate = makeRelease.validateReleaseVersion('V12,3f')
+        testDate = makeRelease.validateReleaseVersion('V12.3f')
+        self.assertEqual(False, testDate)
+
+    def test_testValidReleaseVersion_majorToShort(self):
+        testDate = makeRelease.validateReleaseVersion('V1.30')
+        self.assertEqual(False, testDate)
+
+    def test_testValidReleaseVersion_minorToShort(self):
+        testDate = makeRelease.validateReleaseVersion('V88.3')
         self.assertEqual(False, testDate)
 
 if __name__ == '__main__':

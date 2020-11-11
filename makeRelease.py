@@ -72,6 +72,7 @@ def validateReleaseVersion(releaseVersion):
     majorV = tryInt(releaseVersion[1:3])
     minorV = tryInt(releaseVersion[4:6])
     separater = releaseVersion[3:4]
+    strLen = len(releaseVersion)
 
     if 'V' != leadingV:
         feedback = False
@@ -80,6 +81,8 @@ def validateReleaseVersion(releaseVersion):
     if ((0 > minorV) or (99 < minorV)):
         feedback = False
     if '.' != separater:
+        feedback = False
+    if 6 != strLen:
         feedback = False
     return feedback
 
