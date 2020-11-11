@@ -5,8 +5,7 @@ import git
 import argparse
 import os.path
 import os
-from datetime import date
-
+#import subprocess
 
 #---------------------------------------------------------------------------
 def main():
@@ -85,7 +84,9 @@ def setVersionNumberAndCommit(repo, verNumber):
 # Merge the branch
 def runMerge(sourceBranch, versionNr):
     try:
-        mergeString = 'sourceBranch -m "' + versionNr + '"'
+        #>>> result = subprocess.run(['ls', '-l'], stdout=subprocess.PIPE)
+        #>>> result.stdoutfrom datetime import date
+        mergeString = sourceBranch + ' -m "' + versionNr + '"'
         print('Merge string: ' + mergeString)
         repo.git.merge(mergeString, no_ff=True)
         return True
